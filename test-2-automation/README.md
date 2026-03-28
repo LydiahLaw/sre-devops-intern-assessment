@@ -9,7 +9,7 @@
 
 > Azure is listed as preferred but AWS was used as it is my primary cloud platform with existing credentials and tooling configured. The infrastructure patterns (VPC, subnets, security groups, EC2) map directly to Azure equivalents (VNet, subnets, NSGs, VMs).
 
----
+
 
 ## Part A — Tool Choice & Justification
 
@@ -17,7 +17,7 @@
 
 **Terraform** handles all infrastructure provisioning — VPC, subnets, internet gateway, route tables, security groups, EC2 instances, and key pairs. Terraform is the right tool here because infrastructure resources have a lifecycle (create, update, destroy) that benefits from state management. Declaring resources in HCL makes the intent readable and reviewable.
 
-**Ansible** handles VM configuration after provisioning — installing nginx, setting the hostname, and creating a deploy user with SSH access. Ansible is purpose-built for configuration management — it connects over SSH without requiring an agent on the target machine, and playbooks are idempotent, meaning running the same playbook twice produces the same result without breaking anything.
+**Ansible** handles VM configuration after provisioning — installing nginx, setting the hostname, and creating a deploy user with SSH access. Ansible is purpose-built for configuration management it connects over SSH without requiring an agent on the target machine, and playbooks are idempotent, meaning running the same playbook twice produces the same result without breaking anything.
 
 **Why not Terraform alone:** Terraform can run remote-exec provisioners but they are fragile, hard to maintain, and HashiCorp discourages using them for configuration management. Ansible is the right tool for that layer.
 
@@ -30,7 +30,6 @@
 - SSH private key stays local — only the public key is uploaded to AWS
 - AWS credentials are configured via `aws configure` — never hardcoded in any file
 
----
 
 ## Part B — What Was Provisioned
 
@@ -84,7 +83,6 @@ Internet
 - All traffic from private subnet CIDR → allowed
 - All other inbound → denied
 
----
 
 ## Remote State
 
@@ -99,7 +97,6 @@ State is stored remotely in S3 with DynamoDB locking:
 
 This means multiple engineers can work on the same infrastructure without corrupting state, and every state change is versioned and recoverable.
 
----
 
 ## Module Structure
 ```
@@ -114,7 +111,6 @@ terraform/
     └── compute/     # EC2 instances, key pair, AMI lookup
 ```
 
----
 
 ## How to Run
 
@@ -156,7 +152,7 @@ cd ..
 ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
 ```
 
----
+
 
 ## Ansible Configuration Applied to VM1
 
@@ -172,7 +168,6 @@ PLAY RECAP
 vm1: ok=9  changed=6  unreachable=0  failed=0  skipped=0
 ```
 
----
 
 ## What I Would Add in Production
 
