@@ -15,7 +15,6 @@ node pool upgrades, Azure Policy enforcement, NSG rule drift, certificate
 expiry, Load Balancer health probe changes. I treat this as "no one changed
 the app" not "nothing changed."
 
----
 
 ## 1. First 3 kubectl Commands
 
@@ -33,17 +32,17 @@ ingress or NSG configuration fixes that.
 kubectl get ingress -n <namespace> -o wide
 ```
 A missing or pending external IP on the ingress means the load balancer was
-never provisioned — or was provisioned and lost its IP. This is where AKS
+never provisioned or was provisioned and lost its IP. This is where AKS
 and Azure diverge from vanilla Kubernetes.
 ```bash
 # 3. Describe the service to see the actual port mapping and selector
 kubectl describe service <service-name> -n <namespace>
 ```
 I want to confirm the targetPort matches what the container is actually
-listening on — not what the Dockerfile says, not what the developer told me,
+listening on not what the Dockerfile says, not what the developer told me,
 but what the process is actually bound to.
 
----
+
 
 ## 2. Which Resource to Check First and Why
 
@@ -66,10 +65,7 @@ labels? Is the port and targetPort correct?
 **Deployment last** — pods are Running, so the deployment is not the problem.
 I check it only to verify labels match the service selector.
 
-I do not check the Deployment first. That is working by the problem's own
-description.
 
----
 
 ## 3. Testing at Each Layer
 
@@ -98,10 +94,9 @@ kubectl logs -n ingress-nginx -l app.kubernetes.io/name=ingress-nginx --tail=50
 ```
 Ingress controller logs will show whether requests are arriving and what
 is happening to them. A timeout at the external URL with no entries in
-the ingress logs means requests are not reaching Kubernetes at all —
+the ingress logs means requests are not reaching Kubernetes at all
 the problem is outside the cluster entirely.
 
----
 
 ## 4. Two Azure-Specific Things That Could Cause This
 
@@ -111,8 +106,8 @@ do not mention:
 **1. NSG rules blocking the Load Balancer health probe**
 
 AKS provisions an Azure Load Balancer that health-probes your nodes before
-routing traffic. If an NSG rule — applied by Azure Policy, a security team,
-or automated compliance tooling — blocks the health probe source IP ranges,
+routing traffic. If an NSG rule applied by Azure Policy, a security team,
+or automated compliance tooling blocks the health probe source IP ranges,
 the Load Balancer marks all backends as unhealthy and drops all traffic.
 The pods are Running. The service has endpoints. Everything in Kubernetes
 looks correct. But Azure is silently discarding packets upstream.
@@ -125,7 +120,7 @@ Also check NSG flow logs in Network Watcher for denied traffic.
 AKS performs automatic node upgrades. During an upgrade, nodes are cordoned
 and drained. If the application has no PodDisruptionBudget and no more than
 one replica, all pods get evicted simultaneously during the drain. New pods
-start on the new node — they show Running — but they may still be
+start on the new node, they show Running but they may still be
 initialising when the readiness probe fires. The service has endpoints
 because Kubernetes adds the pod to endpoints when it is Running, not when
 it is actually ready, if the readiness probe is misconfigured.
