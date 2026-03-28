@@ -10,7 +10,7 @@ This distinction matters before running a single command:
 - **Timeout** → the packet is disappearing. Look at the network path.
 
 "No recent code changes" is also a red flag, not a reassurance. In AKS,
-infrastructure changes constantly without anyone touching application code —
+infrastructure changes constantly without anyone touching application code
 node pool upgrades, Azure Policy enforcement, NSG rule drift, certificate
 expiry, Load Balancer health probe changes. I treat this as "no one changed
 the app" not "nothing changed."
@@ -18,7 +18,7 @@ the app" not "nothing changed."
 
 ## 1. First 3 kubectl Commands
 
-Most people start with `kubectl get pods` — but we already know pods are Running.
+Most people start with `kubectl get pods` but we already know pods are Running.
 Starting there wastes time. I start where the timeout points: the network path.
 ```bash
 # 1. Check if the service has endpoints — if this is empty, traffic has nowhere to go
