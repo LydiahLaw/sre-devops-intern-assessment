@@ -7,3 +7,6 @@
 
 # SSH keys
 *.pem
+# AWS CLI installer
+aws/
+awscliv2.zip
