@@ -1,0 +1,50 @@
+---
+- name: Configure VM1 gateway server
+  hosts: gateway
+  become: true
+
+  vars:
+    deploy_user: deployuser
+    hostname: sre-gateway
+
+  tasks:
+    - name: Set system hostname
+      hostname:
+        name: "{{ hostname }}"
+
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start and enable nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Create deploy user
+      user:
+        name: "{{ deploy_user }}"
+        shell: /bin/bash
+        create_home: yes
+        state: present
+
+    - name: Add SSH key for deploy user
+      authorized_key:
+        user: "{{ deploy_user }}"
+        key: "{{ lookup('file', '~/.ssh/sre-assessment.pub') }}"
+        state: present
+
+    - name: Verify nginx is running
+      command: systemctl status nginx
+      register: nginx_status
+
+    - name: Show nginx status
+      debug:
+        msg: "{{ nginx_status.stdout_lines }}"

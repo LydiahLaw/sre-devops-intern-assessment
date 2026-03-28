@@ -1,0 +1,4 @@
+vm1_private_ip = "10.0.1.196"
+vm1_public_ip = "3.71.177.78"
+vm2_private_ip = "10.0.2.136"
+vpc_id = "vpc-06a444ea0c67508be"
