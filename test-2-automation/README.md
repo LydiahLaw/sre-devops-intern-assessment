@@ -7,9 +7,9 @@
 - Ansible core 2.20.3
 - Deployed from WSL2 on Windows
 
-> Azure is listed as preferred but AWS was used as it is my primary cloud platform with existing credentials and tooling configured. The infrastructure patterns (VPC, subnets, security groups, EC2) map directly to Azure equivalents (VNet, subnets, NSGs, VMs).
+> Azure is listed as preferred. I used AWS as it is my primary cloud platform with existing credentials and tooling configured. The infrastructure patterns map directly to Azure equivalents VPC to VNet, security groups to NSGs, EC2 to Azure VMs. I pick up new tools quickly and can transfer these concepts to Azure with minimal ramp-up time.
 
----
+
 
 ## Part A — Tool Choice & Justification
 
@@ -30,7 +30,7 @@
 - SSH private key stays local — only the public key is uploaded to AWS
 - AWS credentials are configured via `aws configure` — never hardcoded in any file
 
----
+
 
 ## Part B — What Was Provisioned
 
@@ -84,7 +84,7 @@ Internet
 - All traffic from private subnet CIDR → allowed
 - All other inbound → denied
 
----
+
 
 ## Remote State
 
@@ -99,7 +99,7 @@ State is stored remotely in S3 with DynamoDB locking:
 
 This means multiple engineers can work on the same infrastructure without corrupting state, and every state change is versioned and recoverable.
 
----
+
 
 ## Module Structure
 ```
@@ -114,7 +114,7 @@ terraform/
     └── compute/     # EC2 instances, key pair, AMI lookup
 ```
 
----
+
 
 ## How to Run
 
@@ -156,7 +156,7 @@ cd ..
 ansible-playbook -i ansible/inventory.ini ansible/playbook.yml
 ```
 
----
+
 
 ## Ansible Configuration Applied to VM1
 
@@ -172,7 +172,7 @@ PLAY RECAP
 vm1: ok=9  changed=6  unreachable=0  failed=0  skipped=0
 ```
 
----
+
 
 ## What I Would Add in Production
 
