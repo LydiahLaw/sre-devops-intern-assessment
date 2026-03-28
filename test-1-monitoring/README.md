@@ -87,7 +87,7 @@ kubectl create deployment failing-app --image=busybox --replicas=1 -n demo -- sh
 
 `failing-app` intentionally crashes to generate CrashLoopBackOff events for alert testing.
 
----
+
 
 ## Part C — Dashboards
 
