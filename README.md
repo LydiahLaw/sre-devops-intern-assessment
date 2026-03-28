@@ -3,7 +3,6 @@
 **Candidate:** Lydiah Nganga
 **GitHub:** [LydiahLaw](https://github.com/LydiahLaw)
 
----
 
 ## Repository Structure
 
@@ -13,7 +12,7 @@
 | `test-2-automation/` | Infrastructure automation — Terraform + Ansible on AWS |
 | `test-3-troubleshooting/` | Troubleshooting scenario answers |
 
----
+
 
 ## Test 1 — Monitoring Stack
 
@@ -26,7 +25,7 @@ Deployed a full observability stack on a local Kubernetes cluster (kind) simulat
 
 See [test-1-monitoring/README.md](test-1-monitoring/README.md) for full details.
 
----
+
 
 ## Test 2 — Infrastructure Automation
 
@@ -39,13 +38,13 @@ Provisioned a two-tier network architecture on AWS using Terraform modules + Ans
 
 See [test-2-automation/README.md](test-2-automation/README.md) for full details.
 
----
+
 
 ## Test 3 — Troubleshooting Scenarios
 
 - [Scenario 1](test-3-troubleshooting/scenario-1.md) — Pods Running but application unreachable
 
----
+
 
 ## Tools Used
 
